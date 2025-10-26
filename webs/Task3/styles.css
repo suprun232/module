@@ -1,0 +1,122 @@
+:root{
+  --bg:#ffffff; --fg:#1a1a1a; --muted:#6b7280;
+  --accent-khaki:#8a9a5b; --accent-khaki-600:#6f7d47; --accent-khaki-100:#eef2e0;
+  --border:#e5e7eb; --ok:#6f7d47; --warn:#d97706; --danger:#b91c1c;
+  --focus:#1f2937; --stripe:#fafaf9;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+
+.container{max-width:1200px;margin:auto;padding:1rem}
+@media (max-width:480px){ .container{padding:.75rem} }
+
+.site-header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);z-index:10}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+#title{margin:0}
+
+.nav{list-style:none;display:flex;gap:.75rem;margin:0;padding:0}
+.nav a{padding:.4rem .7rem;border-radius:.5rem;text-decoration:none;color:var(--fg)}
+.nav a[aria-current="page"], .nav a:hover{background:var(--accent-khaki-100);outline:1px solid var(--accent-khaki)}
+.nav-toggle{display:none}
+
+/* Мобільна навігація */
+@media (max-width:768px){
+  .nav-toggle{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border:1px solid var(--border);
+    border-radius:.5rem;background:var(--accent-khaki-100);
+  }
+  nav{width:100%}
+  .nav{display:none;flex-direction:column;gap:.35rem;margin:.5rem 0 0}
+  .nav.is-open{display:flex}
+}
+
+.app .view{min-height:60vh}
+
+/* Карти/KPI */
+.card{background:#fff;border:1px solid var(--border);border-radius:.75rem;padding:1rem}
+.grid{display:grid;gap:1rem}
+.grid.cols-2{grid-template-columns:1fr}
+@media(min-width:900px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media (max-width:900px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .kpis{grid-template-columns:1fr} }
+.kpi{border:1px solid var(--border);border-radius:.75rem;padding:1rem;background:#fff}
+.kpi h3{margin:.25rem 0;font-size:1rem;color:var(--muted)}
+.kpi .val{font-weight:700;font-size:1.6rem}
+
+/* Фільтри */
+.filters{display:grid;gap:.75rem}
+@media(min-width:900px){ .filters{grid-template-columns:1fr 1fr 1fr} }
+@media (max-width:900px){ .filters{grid-template-columns:1fr 1fr} }
+@media (max-width:640px){ .filters{grid-template-columns:1fr} }
+
+input, select, button{font:inherit}
+input, select{padding:.55rem .6rem;border:1px solid var(--border);border-radius:.5rem;background:#fff}
+button{cursor:pointer}
+.btn{background:var(--accent-khaki);color:#fff;border:none;padding:.55rem .9rem;border-radius:.5rem}
+.btn--ghost{background:#fff;border:1px solid var(--border);color:var(--fg)}
+.btn:focus,input:focus,select:focus{outline:3px solid var(--accent-khaki-100);border-color:var(--accent-khaki)}
+.actions{display:flex;gap:.5rem;align-items:center}
+
+/* Таблиця (десктоп) */
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:.75rem}
+.table{width:100%;border-collapse:collapse;min-width:900px}
+.table th,.table td{padding:.6rem .75rem;border-bottom:1px solid var(--border)}
+.table thead th{position:sticky;top:0;background:var(--accent-khaki-100)}
+.table tbody tr:nth-child(odd){background:var(--stripe)}
+.table th.sortable{cursor:pointer}
+.table th.sortable::after{content:" ⬍";font-size:.85em;color:var(--muted)}
+.tr-highlight{outline:2px solid var(--accent-khaki);background:#f7f7ed}
+
+/* Таблиця → картки на мобільних */
+@media (max-width:640px){
+  .table-wrap{overflow:visible;border:none}
+  .table{min-width:0;border-collapse:separate;border-spacing:0}
+  .table thead{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .table tbody tr{
+    display:block;background:#fff;border:1px solid var(--border);
+    border-radius:.75rem;margin-bottom:.75rem;
+  }
+  .table tbody td,.table tbody th{
+    display:flex;justify-content:space-between;gap:.75rem;
+    border-bottom:1px solid var(--border);padding:.6rem .75rem;
+  }
+  .table tbody tr > *:last-child{border-bottom:none}
+  .table td::before,.table th::before{
+    content:attr(data-label);min-width:7.5rem;color:var(--muted);font-weight:600;
+  }
+  .actions{justify-content:flex-end}
+}
+
+/* Бейджі/легенда/схема */
+.badge{display:inline-block;padding:.2rem .5rem;border-radius:.5rem;color:#fff;font-size:.85rem}
+.badge.ok{background:var(--ok)} .badge.late{background:var(--warn)} .badge.cancel{background:var(--danger)}
+
+.legend{display:flex;gap:1rem;align-items:center;color:var(--muted);font-size:.9rem}
+.legend .mark{display:inline-block;width:16px;height:6px;border-radius:3px}
+.mark.ok{background:var(--ok)} .mark.warn{background:var(--warn)} .mark.danger{background:var(--danger)}
+
+.map{border:1px solid var(--border);border-radius:.75rem;overflow:hidden}
+svg.track{width:100%;height:auto;background:#fff}
+.track-ok{stroke:var(--ok);stroke-width:6}
+.track-warn{stroke:var(--warn);stroke-width:6;stroke-dasharray:8 6}
+.track-danger{stroke:var(--danger);stroke-width:6;stroke-dasharray:2 4}
+.track-hover{filter: drop-shadow(0 0 4px var(--accent-khaki))}
+.station{fill:#fff;stroke:var(--fg);stroke-width:2}
+.station-label{font-size:12px;fill:var(--muted);text-anchor:middle}
+
+/* Тости/Модалки */
+.toast{position:fixed;right:1rem;bottom:1rem;background:#111827;color:#fff;padding:.6rem .8rem;border-radius:.5rem;opacity:.96;transform:translateY(10px);transition:all .2s}
+.toast.show{transform:none}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.modal{background:#fff;border-radius:.75rem;border:1px solid var(--border);max-width:560px;width:calc(100% - 2rem);padding:1rem}
+.modal header{display:flex;justify-content:space-between;align-items:center}
+.modal .close{background:#fff;border:1px solid var(--border);border-radius:.5rem;padding:.25rem .5rem}
+:focus-visible{outline:3px dashed var(--focus);outline-offset:2px}
+
+.density-switch{display:flex;gap:.5rem}
+.chip{padding:.4rem .7rem;border:1px solid var(--border);border-radius:999px;background:var(--accent-khaki-100)}
+.chip[aria-pressed="true"]{outline:2px solid var(--accent-khaki);border-color:var(--accent-khaki)}
+body.density-compact .table th, body.density-compact .table td{padding:.35rem .5rem}

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Веб-панель диспетчера станції — V2 (Vanilla JS)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="density-normal">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1>Веб-панель диспетчера станції</h1>
+      <div class="density-switch" role="group" aria-label="Перемикач щільності">
+        <button type="button" class="chip js-density" data-mode="normal" aria-pressed="true">Звичайна</button>
+        <button type="button" class="chip js-density" data-mode="compact" aria-pressed="false">Щільна</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="container main-grid">
+    <section class="card">
+      <h2>Фільтри</h2>
+      <form id="filters" class="filters-form" autocomplete="off">
+        <div class="form-row">
+          <label for="q">Поїзд / № рейсу</label>
+          <input id="q" name="q" type="search" placeholder="IC101, 'Центральна'..." />
+        </div>
+        <div class="form-row">
+          <label for="status">Статус</label>
+          <select id="status" name="status">
+            <option value="">Всі</option>
+            <option>За розкладом</option>
+            <option>Запізнюється</option>
+            <option>Скасовано</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="segment">Ділянка колії</label>
+          <select id="segment" name="segment">
+            <option value="">Всі</option>
+            <!-- опції додасть JS -->
+          </select>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="table-header">
+        <h2>Рейси / Поїзди</h2>
+        <button id="btnAdd" class="btn">+ Додати рейс</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="trainsTable">
+          <thead>
+            <tr>
+              <th data-sort="no"    role="button" tabindex="0" aria-label="Сортувати за №">№</th>
+              <th>Напрямок</th>
+              <th data-sort="dep"   role="button" tabindex="0" aria-label="Сортувати за відправленням">Відпр.</th>
+              <th data-sort="arr"   role="button" tabindex="0" aria-label="Сортувати за прибуттям">Приб.</th>
+              <th>Поточне місце</th>
+              <th data-sort="status" role="button" tabindex="0" aria-label="Сортувати за статусом">Статус</th>
+              <th>Стан колії</th>
+              <th class="actions">Дії</th>
+            </tr>
+          </thead>
+          <tbody id="trainsTbody"><!-- генерується JS --></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card map-card">
+      <h2>Схема колій (заглушка, SVG)</h2>
+      <div id="trackMap" class="track-map-wrap" aria-live="polite"><!-- SVG вставляє JS --></div>
+      <p class="muted">Наведіть/клікніть на ділянку — підсвічення синхронізується з таблицею; наведіть на рядок — підсвітиться ділянка.</p>
+    </section>
+
+    <aside class="card" aria-labelledby="form-title">
+      <h2 id="form-title">Форма рейсу</h2>
+      <form id="trainForm" class="train-form" novalidate>
+        <input type="hidden" id="mode" value="add" />
+        <input type="hidden" id="oldNo" />
+        <div class="form-row">
+          <label for="no">№ рейсу <span aria-hidden="true">*</span></label>
+          <input id="no" name="no" required placeholder="IC101" />
+          <small class="muted">Має бути унікальним</small>
+        </div>
+        <div class="form-row">
+          <label for="direction">Напрямок <span aria-hidden="true">*</span></label>
+          <input id="direction" name="direction" required placeholder="Центральна → Південна" />
+        </div>
+        <div class="form-row two">
+          <div>
+            <label for="dep">Відправлення (HH:MM) <span aria-hidden="true">*</span></label>
+            <input id="dep" name="dep" required placeholder="07:10" inputmode="numeric" pattern="^([01]\\d|2[0-3]):([0-5]\\d)$" />
+          </div>
+          <div>
+            <label for="arr">Прибуття (HH:MM) <span aria-hidden="true">*</span></label>
+            <input id="arr" name="arr" required placeholder="09:40" inputmode="numeric" pattern="^([01]\\d|2[0-3]):([0-5]\\d)$" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="location">Поточне місце <span aria-hidden="true">*</span></label>
+          <input id="location" name="location" required placeholder="Станція D / Ділянка B–C" />
+        </div>
+        <div class="form-row two">
+          <div>
+            <label for="statusSel">Статус</label>
+            <select id="statusSel" name="status">
+              <option>За розкладом</option>
+              <option>Запізнюється</option>
+              <option>Скасовано</option>
+            </select>
+          </div>
+          <div>
+            <label for="segmentSel">Ділянка колії</label>
+            <select id="segmentSel" name="segment"><!-- опції з даних --></select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn" type="submit">Зберегти</button>
+          <button class="btn btn--ghost" type="reset" id="resetForm">Скинути</button>
+        </div>
+        <p class="muted">* — обовʼязкові поля. Формат часу: <code>HH:MM</code>.</p>
+      </form>
+    </aside>
+  </main>
+
+  <footer class="container footer">
+  </footer>
+
+  <!-- Дані (насіння) -->
+  <script src="./data.js"></script>
+  <!-- Логіка на Vanilla JS -->
+  <script src="./app.js"></script>
+</body>
+</html>

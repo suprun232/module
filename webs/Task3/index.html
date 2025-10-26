@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Веб-панель диспетчера станції</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="density-normal">
+    <header class="site-header" role="banner">
+      <div class="container header-inner">
+        <h1 id="title">Веб-панель диспетчера станції</h1>
+
+        <!-- Гамбургер для мобільних -->
+        <button class="nav-toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Меню">☰</button>
+
+        <nav aria-label="Головна навігація">
+          <ul class="nav" id="navMenu">
+            <li><a href="#/dashboard" data-route>Dashboard</a></li>
+            <li><a href="#/trains" data-route>Trains</a></li>
+            <li><a href="#/tracks" data-route>Tracks</a></li>
+            <li><a href="#/reports" data-route>Reports</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="app" class="container app" role="main" aria-live="polite">
+      <section id="view" class="view" tabindex="-1"></section>
+    </main>
+
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+    <div id="modal-root"></div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Дані -->
+    <script src="./js/api-mock.js"></script>
+
+    <!-- Ядро -->
+    <script src="./js/store.js"></script>
+
+    <!-- Утиліти -->
+    <script src="./js/utils/validation.js"></script>
+    <script src="./js/utils/format.js"></script>
+    <script src="./js/utils/csvExport.js"></script>
+
+    <!-- UI -->
+    <script src="./js/ui/modal.js"></script>
+    <script src="./js/ui/toast.js"></script>
+    <script src="./js/ui/filters.js"></script>
+    <script src="./js/ui/table.js"></script>
+    <script src="./js/ui/nav.js"></script> <!-- НОВЕ -->
+
+    <!-- Фічі -->
+    <script src="./js/features/dashboard.js"></script>
+    <script src="./js/features/trains.js"></script>
+    <script src="./js/features/tracks.js"></script>
+    <script src="./js/features/reports.js"></script>
+
+    <!-- Роутер після фіч -->
+    <script src="./js/router.js"></script>
+
+    <!-- Тести -->
+    <script src="./js/tests.js"></script>
+  </body>
+</html>
